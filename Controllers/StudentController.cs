@@ -1,13 +1,11 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StudentsApi.Model;
 using StudentsApi.Repository;
-using MongoDB.Bson;
 
 namespace StudentsApi.Controllers;
 
 [ApiController]
-[Route("students")]
+[Route("[controller]")]
 public class StudentController : ControllerBase
 {
     private readonly StudentRepository _repository;
@@ -56,7 +54,8 @@ public class StudentController : ControllerBase
     public async Task<IActionResult> Delete(string id)
     {
         var student = await _repository.GetByIdAsync(id);
-        await _repository.DeleteAsync(student?.Id);
+        if (student != null)
+            await _repository.DeleteAsync(student.Id);
         return Ok(student?.Id);
     }
 }
